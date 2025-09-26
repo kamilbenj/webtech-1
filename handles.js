@@ -1,39 +1,38 @@
-// ./handles.js
-const url = require('url')
 const fs = require('fs')
-const nodePath = require('path') 
-const qs = require('querystring')
+const path = require('path')
+const express = require('express')
+const router = express.Router()
 
-module.exports = {
-  serverHandle: function (req, res) {
-    const route = url.parse(req.url)
-    const path = route.pathname 
-    const params = qs.parse(route.query)
-
-    if (path === '/'){
-        res.writeHead(200, {'Content-Type': 'text/plain'})
-        res.write('hello takes a name query parameter (hello?name=[name]), if the parameter is a random name, it will reply reply hello [name], if the parameter is my name (Kamil), it will reply with a short intro of myself')
+router.get('/', (req, res) => {
+    const name = req.query.name;
+    if (!name)
+    {
+        res.send('hello takes a name query parameter (hello?name=[name]), if the parameter is a random name, it will reply reply hello [name], if the parameter is my name (Kamil), it will reply with a short intro of myself')
     }
 
-    else if (path === '/hello' && 'name' in params) {
-        res.writeHead(200, {'Content-Type': 'text/plain'})
-        if (params['name']==='kamil'){
-            res.write('Hello, my name is Kamil, I am 20 years old, I study Cybersecurity in ECE Paris')
-        }
-        else {res.write('Hello ' + params['name'])}
-    } 
+    else if (name === 'kamil')
+    {
+        return res.send('Hello, my name is Kamil, I am 20 years old, I study Cybersecurity in ECE Paris')
+    }
 
-    const slug = path.startsWith('/') ? path.slice(1) : path
-    const filename = nodePath.join(__dirname, 'content', slug + '.json')
+    res.send ('hello ' + name)
+})
 
-    if (fs.existsSync(filename)){
+router.get('/:slug', (req, res) => {
+    const slug = req.params.slug
+    const filename = path.join(__dirname, 'content', slug + '.json')
+
+    if (fs.existsSync(filename)) 
+    {
         const data = fs.readFileSync(filename, 'utf8')
-        res.writeHead(200, { 'Content-Type': 'application/json' })
-        res.end(data)
+        res.json(JSON.parse(data))
+    } 
+    else 
+    {
+        res.status(404).send({ error: 'File not found' })
     }
-    else {
-        res.end('404 Not Found')
-    }
-    res.end()
-  }
-} 
+})
+
+module.exports = router
+
+

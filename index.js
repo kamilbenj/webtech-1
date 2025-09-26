@@ -1,7 +1,7 @@
-// ./index.js
-const http = require('http')
-const handles = require('./handles')
+const express = require('express')
+const router = require('./handles')
 
-http
-.createServer(handles.serverHandle)
-.listen(8080)
+const app = express()
+app.use(router)
+
+app.listen(8080)

@@ -1,14 +1,15 @@
 {
   "name": "lab-1",
   "version": "1.0.0",
-  "description": "",
+  "description": "Lab 3",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js"
   },
-  "author": "",
+  "author": "Rayan GAAD, Gabriel DALIBERT, Kamil BENJELLOUN",
   "license": "ISC",
   "dependencies": {
+    "express": "^5.1.0",
     "nodemon": "^3.1.10"
   }
 }
