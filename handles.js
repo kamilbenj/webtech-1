@@ -2,6 +2,8 @@ const fs = require('fs')
 const path = require('path')
 const express = require('express')
 const router = express.Router()
+const db = require('./db');
+const { v4: uuidv4 } = require('uuid');
 
 router.get('/', (req, res) => {
     const name = req.query.name;
@@ -17,6 +19,7 @@ router.get('/', (req, res) => {
 
     res.send ('hello ' + name)
 })
+
 
 router.get('/:slug', (req, res) => {
     const slug = req.params.slug
