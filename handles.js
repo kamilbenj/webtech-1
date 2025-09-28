@@ -20,6 +20,40 @@ router.get('/', (req, res) => {
     res.send ('hello ' + name)
 })
 
+//GET /articles - list all articles
+router.get('/articles', (req, res) => {
+  res.json(db.articles)
+})
+
+//POST /articles - add a new article
+router.post('/articles', (req, res) => {
+  const {title, content, author } = req.body;
+
+  if (!title || !content || !author) {
+    return res.status(400).json({ error: 'title, content and author are required' });
+  }
+
+  const newArticle = {
+    id : uuidv4(),
+    title,
+    content,
+    date: Date.now(),
+    author
+  };
+
+  db.articles.push(newArticle);
+  res.status(201).json(newArticle);
+});
+
+//GET /articles/:articleId - get an article by ID
+router.get('/articles/:articleId', (req, res) => {
+  const articleId = req.params.articleId;
+  const article = db.articles.find(a => a.id == articleId);
+  if (!article) {
+    return res.status(404).json({ error: 'Article not found' })
+    }
+  res.json(article);
+})
 
 router.get('/:slug', (req, res) => {
     const slug = req.params.slug
@@ -37,5 +71,3 @@ router.get('/:slug', (req, res) => {
 })
 
 module.exports = router
-
-
