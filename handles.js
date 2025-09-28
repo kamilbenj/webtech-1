@@ -55,6 +55,48 @@ router.get('/articles/:articleId', (req, res) => {
   res.json(article);
 })
 
+//GET /articles/:articleId/comments - get all comments of the article with articleId
+router.get('/articles/:articleId/comments', (req, res) => {
+  const articleId = req.params.articleId;
+  const comment = db.comments.filter(a => a.articleId == articleId);
+  if (!comment) {
+    return res.status(404).json({ error: 'Article not found' })
+    }
+  res.json(comment);
+})
+
+//POST /articles/:articleId/comments - add a new comment to a specific article with articleId
+router.post('/articles/:articleId/comments', (req, res) => {
+    const articleId = req.params.articleId;
+    const { content, author } = req.body;
+
+  if (!content || !author) {
+    return res.status(400).json({ error: 'content and author are required' });
+  }
+
+  const newComment = {
+    id: uuidv4(),
+    timestamp: Date.now(),
+    content,
+    articleId,
+    author,
+  };
+
+  db.comments.push(newComment);
+  res.status(201).json(newComment); // 201 = Created
+});
+
+//GET /articles/:articleId/comments/:commentId - get a comment with commentId of the article with articleId
+router.get('/articles/:articleId/comments/:commentId', (req, res) => {
+  const articleId = req.params.articleId;
+  const commentId = req.params.commentId;
+  const comment = db.comments.find(a => a.id == commentId && a.articleId == articleId);
+  if (!comment) {
+    return res.status(404).json({ error: 'Article not found' })
+    }
+  res.json(comment);
+})
+
 router.get('/:slug', (req, res) => {
     const slug = req.params.slug
     const filename = path.join(__dirname, 'content', slug + '.json')
