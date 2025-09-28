@@ -2,11 +2,11 @@
 
 ## Introduction
 
-This project is a simple Node.js web server.  
+This project is a simple Web API built with Express.js.
 It demonstrates:
-- how to create a server,  
-- how to handle routes (`/`, `/hello`),  
-- and how to serve JSON files dynamically from a `content/` folder.  
+- how to define RESTful routes,
+- how to manage in-memory data models (articles and comments),
+- and how to test endpoints using Postman or curl.
 
 ## Prerequisites
 
@@ -15,16 +15,12 @@ It demonstrates:
 
 ## Installation
 
-1. Clone this repository:
-   ```bash
-   git clone <git@github.com:kamilbenj/webtech-1...git>
-   cd <LAB 1>
-   ```
-
-2. Install dependencies :
+Install dependencies :
    ```bash
    npm install
    npm install nodemon
+   npm install express
+   npm install uuid
    ```
 
 ## Usage
@@ -39,7 +35,7 @@ The server will run on http://localhost:8080.
 ### Routes
 
 #### `/`
-Displays a short explanation of how the `/hello` route works.
+Returns a welcome message explaining how to use ?name=....
 
 #### `/hello?name=Alice`
 - Returns:
@@ -47,45 +43,73 @@ Displays a short explanation of how the `/hello` route works.
  'Hello Alice'
 
 #### `/hello?name=Kamil`
+
 - Returns:
 
   'Hello, my name is Kamil, I am 20 years old, I study Cybersecurity in ECE Paris'
 
-#### `/about`
-- display the content of `content/about.json`:
-  ```json
-  {
-  "title": "About",
-  "content": "this is a node.js app made for my lab",
-  "author": "BENJELLOUN Kamil",
-  "date": "14/09/2025"
-  }
-  ```
 
-#### `/something`
-- If a file `content/something.json` exists, its JSON content is served.  
-- Otherwise, the server returns:
-  
-  '404 Not Found'
-  
+#### `/articles`
+
+- GET /articles
+Returns the list of all articles in JSON.
+
+- POST /articles
+Creates a new article.
+
+Example body (JSON):
+```json
+{
+  "title": "New Post",
+  "content": "This is the article content",
+  "author": "Rayan"
+}
+```
+
+Returns the newly created article with id and date
+
+#### `/articles/:articleId`
+
+GET /articles/:articleId
+Returns the article matching articleId.
+If not found → 404 { "error": "Article not found" }.
+
+#### `/articles/:articleId/comments`
+	
+- GET /articles/:articleId/comments
+Returns all comments linked to the article.
+If the article doesn’t exist → 404 { "error": "Article not found" }.
+
+- POST /articles/:articleId/comments
+Adds a new comment to the specified article.
+Example body (JSON):
+```json
+{
+  "content": "Nice article!",
+  "author": "Gab"
+}
+```
+
+#### `/articles/:articleId/comments/:commentId`
+
+GET /articles/:articleId/comments/:commentId
+Returns the specific comment for an article.
+If not found → 404 { "error": "Comment not found" }.
+
+#### `/:slug`
+
+If a file content/<slug>.json exists, its content is returned.
+Otherwise → 404 { "error": "File not found" }.
+
 
 ## Advanced Example
 
-1. Add a new file `content/student.json`:
-   ```json
-   {
-     "title": "student",
-     "email": "example@mail.com",
-     "phone": "07 xx xx xx xx"
-   }
-   ```
-
-2. Start the server and visit:  
-   http://localhost:8080/student
-👉 The server will dynamically load and display the JSON file!
+You can test the API using Postman and test the url : http://localhost:8080/articles
 
 ---
 
 ## Author
 
 Kamil BENJELLOUN
+Rayan GAAD
+Gabriel DALIBERT
