@@ -1,115 +1,106 @@
-# Node.js HTTP Server
+# Next.js Frontend – WebTech Lab 4
+
 
 ## Introduction
 
-This project is a simple Web API built with Express.js.
-It demonstrates:
-- how to define RESTful routes,
-- how to manage in-memory data models (articles and comments),
-- and how to test endpoints using Postman or curl.
+This project is a simple frontend web application built with Next.js.
+
+The goal of this lab is to:
+- understand the Next.js project structure and App Router,
+- create static pages (`Home`, `About`, `Contacts`, `Articles`),
+- implement dynamic routes (e.g., `/articles/[articleId]`),
+- create shared components like a header, a footer and a navigation menu
+
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) (v16 or higher recommended)  
-- [npm] (comes with Node.js)
+- [Node.js](https://nodejs.org/)
+- [npm](https://www.npmjs.com/)
+
 
 ## Installation
 
-Install dependencies :
-   ```bash
-   npm install
-   npm install nodemon
-   npm install express
-   npm install uuid
-   ```
+Clone the repository and install dependencies:
+
+```bash
+git clone <https://github.com/kamilbenj/webtech-111.git>
+cd client
+npm install
+```
 
 ## Usage
 
-### Start the server
+### Start the development server
+
 ```bash
-npm run dev  
+npm run dev
 ```
 
-The server will run on http://localhost:8080.
+The app will run on [http://localhost:3000]
 
-### Routes
+## Pages and Routes
 
-#### `/`
-Returns a welcome message explaining how to use ?name=....
+### `/`
+**Home page**
 
-#### `/hello?name=Alice`
 - Returns:
 
- 'Hello Alice'
+  'Welcome to My WebTech Lab 4!, This website was built with Next.js'
 
-#### `/hello?name=Kamil`
+
+### `/about`
+**About page**
 
 - Returns:
 
   'Hello, my name is Kamil, I am 20 years old, I study Cybersecurity in ECE Paris'
 
 
-#### `/articles`
+### `/contacts`
+**Contacts page**
 
-- GET /articles
-Returns the list of all articles in JSON.
+Displays a list of three contacts from different cities with:
+- name  
+- address  
+- phone number  
+- email  
 
-- POST /articles
-Creates a new article.
-
-Example body (JSON):
-```json
-{
-  "title": "New Post",
-  "content": "This is the article content",
-  "author": "Rayan"
-}
+Example:
+```
+Paris — Jean Dupont — 12 Rue de Rivoli, 75004 Paris — +33 1 45 23 67 89 — jean.dupont@contact.fr
 ```
 
-Returns the newly created article with id and date
+### `/articles`
+**Articles page**
 
-#### `/articles/:articleId`
+Lists 3 articles with title, author, and short description :
 
-GET /articles/:articleId
-Returns the article matching articleId.
-If not found → 404 { "error": "Article not found" }.
-
-#### `/articles/:articleId/comments`
-	
-- GET /articles/:articleId/comments
-Returns all comments linked to the article.
-If the article doesn’t exist → 404 { "error": "Article not found" }.
-
-- POST /articles/:articleId/comments
-Adds a new comment to the specified article.
-Example body (JSON):
-```json
-{
-  "content": "Nice article!",
-  "author": "Gab"
-}
+```
+1. My First Website — Jean Dupont
+2. Learning React — Marie Dubois
+3. Discovering Next.js — Pierre Martin
 ```
 
-#### `/articles/:articleId/comments/:commentId`
 
-GET /articles/:articleId/comments/:commentId
-Returns the specific comment for an article.
-If not found → 404 { "error": "Comment not found" }.
+### `/articles/[articleId]`
+**Dynamic article page**
 
-#### `/:slug`
+A dynamic route that displays the `articleId` passed in the URL with it's informations :
 
-If a file content/<slug>.json exists, its content is returned.
-Otherwise → 404 { "error": "File not found" }.
+- `/articles/1` → shows the article with ID 1  
+- `/articles/2` → shows the article with ID 2  
 
 
-## Advanced Example
+## Components
 
-You can test the API using Postman and test the url : http://localhost:8080/articles
+- **`Header.js`** — displays the main navigation (Home, About, Contacts, Articles)  
+- **`Footer.js`** — displays a footer common to all pages  
 
----
+These components are imported inside `src/app/layout.js` to appear globally.
 
-## Author
 
-Kamil BENJELLOUN
-Rayan GAAD
-Gabriel DALIBERT
+## Authors
+
+- Kamil BENJELLOUN  
+- Rayan GAAD  
+- Gabriel DALIBERT  
