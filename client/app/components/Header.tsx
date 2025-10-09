@@ -6,73 +6,68 @@ import { usePathname } from 'next/navigation'
 
 export default function Header() {
   const pathname = usePathname()
+  const [isFocused, setIsFocused] = useState(false)
   const [search, setSearch] = useState('')
 
   const links = [
     { href: '/', label: 'Discover' },
     { href: '/animation', label: 'Animation' },
-    { href: '/branding', label: 'Branding' },
-    { href: '/illustration', label: 'Illustration' },
-    { href: '/mobile', label: 'Mobile' },
-    { href: '/web', label: 'Web Design' },
+    { href: '/posts', label: 'Posts' },
+    { href: '/contact', label: 'Contact' },
+    { href: '/about', label: 'About' },
   ]
 
   return (
-    <header className="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white shadow-lg">
-      {/* === Top Section === */}
-      <div className="flex justify-between items-center px-8 py-4">
+    <header className="sticky top-0 z-50 bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
+      <div className="flex items-center justify-between px-8 py-4">
         {/* Logo */}
         <Link href="/" className="text-2xl font-bold tracking-tight">
-          MyBlog<span className="text-pink-200">.</span>
+          MyBlog<span className="text-black-200">.</span>
         </Link>
 
-        {/* Navigation */}
-        <nav className="hidden md:flex space-x-6">
-          {links.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className={`transition-colors duration-200 ${
-                pathname === href
-                  ? 'text-white font-semibold border-b-2 border-white pb-1'
-                  : 'text-pink-100 hover:text-white'
-              }`}
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
+        {/* Nav + Search */}
+        <div className="flex items-center space-x-6">
+          {/* Navigation */}
+          <nav className="hidden md:flex space-x-8">
+            {links.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`transition-all duration-200 py-2 ${
+                  pathname === href
+                    ? 'text-black font-bold border-b-2 border-black pb-1'
+                    : 'text-black-100 hover:text-black hover:font-semibold'
+                }`}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Search Bar */}
+          <div
+            className={`flex items-center rounded-full overflow-hidden w-56 transition-all duration-300 border ${
+              isFocused ? 'bg-white border-black' : 'bg-gray-200 border-gray-300'
+            }`}
+          >
+            
+            {/* Champ de saisie */}
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              placeholder="Search..."
+              className="flex-grow px-3 py-2 bg-transparent text-gray-700 text-sm outline-none placeholder-gray-400"
+            />
+          </div>
+        </div>
 
         {/* Actions */}
-        <div className="space-x-3 hidden md:flex">
-          <button className="text-sm font-medium px-4 py-2 border border-white/30 rounded-md hover:bg-white/10">
-            Sign in
-          </button>
-          <button className="text-sm font-medium px-4 py-2 bg-white text-purple-700 rounded-md hover:bg-pink-100">
+        <div className="hidden md:flex space-x-3">
+          <button className="text-sm font-medium px-4 py-2 bg-white text-purple-700 rounded-full hover:bg-black-100">
             Sign up
-          </button>
-        </div>
-      </div>
-
-      {/* === Search Bar === */}
-      <div className="flex flex-col items-center justify-center pb-8 px-4">
-        <h1 className="text-3xl font-bold mb-3 text-center">
-          Explore the world’s leading design portfolios
-        </h1>
-        <p className="text-pink-100 mb-6 text-center max-w-xl">
-          Millions of creators share their best work here — discover the next big trend.
-        </p>
-
-        <div className="flex items-center bg-white rounded-full shadow-md w-full max-w-lg overflow-hidden">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search..."
-            className="flex-grow px-5 py-3 text-gray-700 outline-none"
-          />
-          <button className="px-6 py-3 bg-pink-500 hover:bg-pink-600 text-white font-medium">
-            Search
           </button>
         </div>
       </div>
